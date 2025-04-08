@@ -1,0 +1,130 @@
+#cloud-config
+autoinstall:
+  version: 1
+  source:
+    id: ubuntu-server-minimal
+########################################################################
+# Locale selection
+########################################################################
+  locale: en_GB.UTF-8
+
+
+########################################################################
+# Keyboard selection
+########################################################################
+  keyboard:
+    layout: gb
+    variant: 'mac'
+
+
+########################################################################
+# Network configuration
+########################################################################
+  network:
+    version: 2
+    renderer: networkd
+    ethernets:
+      ens160:
+        addresses:
+          - 10.1.1.203/24
+        nameservers:
+          addresses:
+            - 10.1.1.3
+            - 10.1.1.4
+        routes:
+          - to: default
+            via: 10.1.1.1
+
+
+########################################################################
+# Kernal
+########################################################################
+  kernel:
+    package: linux-generic
+
+
+########################################################################
+# Account setup
+########################################################################
+  identity:
+    hostname: ubuntu-vm
+    password: ################
+    realname: Troy Rippin
+    username: troy
+  disable_root: false
+
+
+########################################################################
+# Clock and time zone setup
+########################################################################
+  timezone: Europe/Stockholm
+
+
+########################################################################
+# Partitioning
+########################################################################
+  storage:
+    layout:
+      name: direct
+
+
+########################################################################
+# APT/Mirror settings
+########################################################################
+  apt:
+    disable_components: []
+    fallback: offline-install
+    geoip: true
+    mirror-selection:
+      primary:
+      - country-mirror
+      - arches: &id001
+        - amd64
+        - i386
+        uri: http://archive.ubuntu.com/ubuntu/
+      - arches: &id002
+        - arm64
+        uri: http://ports.ubuntu.com/ubuntu-ports
+    preserve_sources_list: false
+    security:
+    - arches: *id001
+      uri: http://security.ubuntu.com/ubuntu/
+    - arches: *id002
+      uri: http://ports.ubuntu.com/ubuntu-ports
+
+
+########################################################################
+# Package selection
+########################################################################
+  packages:
+    - console-data
+    - curl
+    - git
+    - htop
+    - mc
+    - nala
+    - net-tools
+    - systemd-timesyncd
+    - tree
+    - vim
+    - wget
+    - zip
+    - zsh
+
+
+########################################################################
+# SSH
+########################################################################
+  ssh:
+    allow-pw: true
+    authorized-keys: []
+    install-server: true
+
+
+########################################################################
+# Update
+########################################################################
+  updates: security
+
+# rename to user-data and touch meta-data
+# autoinstall ds=nocloud-net\;s=http://10.1.1.100
