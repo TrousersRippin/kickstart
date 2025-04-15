@@ -1,4 +1,4 @@
-# My Kickstarter files
+# My Kickstart files
 
 This repository contains my personal collection of kickstart files.
 
